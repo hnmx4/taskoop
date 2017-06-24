@@ -1,7 +1,15 @@
-import settings
+from os import environ
+from os.path import join, dirname
+from dotenv import load_dotenv
 from github import Github
+from datetime import datetime
 
-g = Github(login_or_token=settings.GITHUB_TOKEN)
+load_dotenv(join(dirname(__file__), '.env'))
+
+GITHUB_TOKEN = environ.get('GITHUB_TOKEN')
+
+g = Github(login_or_token=GITHUB_TOKEN)
 u = g.get_user()
 
-print(u.get_issues())  # u.get_issues().get_page() ???
+for i in u.get_issues():
+    print(i.title, datetime.now() - i.created_at)
